@@ -68,16 +68,71 @@ public class Sort {
 				a[k++] = a2[j++];
 		}
 	}
+	
+	private static void quickSort(int[] a, int l, int h) {
+		if(l < h) {
+			int i = partition(a, l, h);
+			quickSort(a, l, i);
+			quickSort(a, i+2, h);
+		}
+	}
+
+	private static int partition(int[] a, int l, int h) {
+		int p = a[h]; // pivot
+		int i = l - 1; 
+		for(int j = l; j < h; j++) {
+			if(a[j] <= p) {
+				i++;
+				int t = a[i];
+				a[i] = a[j];
+				a[j] = t;
+			}
+		}
+		int t = a[i + 1];
+		a[i + 1] = a[h];
+		a[h] = t;
+		return i;
+	}	
+	
+	private static void heapSort(int[] a) {
+		for(int i = a.length / 2 - 1; i >= 0; i--)  // generate max heap
+            heapify(a, a.length, i);
+		
+		for(int i = a.length - 1; i >= 0; i--) { // remove first element from heap and put on back and heapify reduced heap
+			int t = a[0];
+			a[0] = a[i];
+			a[i] = t;
+			heapify(a, i, 0);
+		}
+	}
+	
+	private static void heapify(int[] a, int n, int i) {
+		int root = i; // index of largest element
+		int l = 2 * i + 1; // left
+		int r = 2 * i + 2; // right
+		
+		if(l < n && a[root] < a[l]) root = l;
+		if(r < n && a[root] < a[r]) root = r;
+		
+		if(root != i) {
+			int t = a[i];
+			a[i] = a[root];
+			a[root] = t;
+			heapify(a, n, root); // heapify impacted child
+		}
+	}
 
 	public static void main(String[] args) {
-		int[] a = new int[] { 25, 59, 73, 89, 90, 1, 3, 5, 7, 11, -1, 72 }; // given array
+		int[] a = new int[] { 25, 59, 73, 89, 90, 1, 3, 5, 7, 11, -1, 72, -8 }; // given array
 		printArray(a);
 		// bubbleSort(a);
 		// printArray(a);
 		// optimizedBubbleSort(a);
 		// printArray(a);
 		// insertionSort(a);
-		mergeSort(a, 0, a.length - 1);
+		// mergeSort(a, 0, a.length - 1);
+		quickSort(a, 0, a.length - 1);
+		// heapSort(a);
 		printArray(a);
 
 	}
